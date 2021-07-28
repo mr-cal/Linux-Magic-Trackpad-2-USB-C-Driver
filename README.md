@@ -42,6 +42,15 @@ The drivers supports regular mouse motion and additionally scrolling and mouse m
 
 Several parameters are avaliable for you to modify to personalize the driver to your taste. These can be found in `/etc/modprobe.d/hid-magicmouse.conf` after install. Modify them and the next time the driver is loaded it will have the new values.
 
+### Reloading the driver
+
+After changing the parameters the driver can be reloaded using the following commands:
+
+```
+sudo rmmod hid_magicmouse
+sudo modprobe hid_magicmouse
+```
+
 ## Troubleshooting (outdated)
 If the driver is not working, please make sure that the correct hid-magicmouse driver gets loaded and try the following steps:
 

@@ -1,12 +1,13 @@
 # Linux Apple Magic Mouse 2 and Magic Trackpad 2 Driver
 
-This repository contains the linux hid-magicmouse driver with Magic Trackpad 2 and Magic Mouse 2 support for Linux 4.18 onwards. For older kernels you might have to diff and backport. It also contains 2 fixes to the Magic Mouse 2 regarding Bluetooth random disconnections and this driver not loading on bluetooth reconnection.
+> [!WARNING]
+> **In kernel version 5.15 support was added for the magic mouse 2**. Meaning that this driver is only necessary for prior versions of the kernel (`<= 5.14`). If you want the mouse to "just work" either install a more recent kernel or proceed with this driver installation.
+>
+> Furthermore, this **repository is in Maintenance mode**, meaning that no new features are planned.
 
-This driver is based off of the work of @robotrovsky, @svartalf, @0xABAD and probably others.
+This repository contains the Linux hid-magicmouse driver with Magic Trackpad 2 and Magic Mouse 2 support for Linux 4.18 onwards. For older kernels, you might have to diff and backport. It also contains 2 fixes to the Magic Mouse 2 regarding Bluetooth random disconnections and no scroll after a Bluetooth reconnection.
 
-Please help to test this driver and report issues.
-
-**NOTE**: Since kernel version 5.15, there is support for the mouse without the need for this driver. We try to backport changes to this driver to have it up-to-date with the one on the kernel and try to offer a bit more functionality but it is not perfect. If you want the mouse to just work either install a more recent kernel or proceed with this driver installation.
+This driver is based on the work of @robotrovsky, @svartalf, @0xABAD, and probably others. Thank you!
 
 ## Ubuntu (and derivatives)
 
@@ -33,14 +34,14 @@ sudo ./remove.sh
 ```
 
 ## Apple Magic Trackpad 2
-The driver supports bluetooth and USB for the trackpad. To connect the Trackpad via bluetooth, it must be clicked once after it is turned on, then the Trackpad tries to reconnect to the last paired (and trusted) connection.
+The driver supports Bluetooth and USB for the trackpad. To connect the Trackpad via Bluetooth, it must be clicked once after it is turned on, then the Trackpad tries to reconnect to the last paired (and trusted) connection.
 
 ## Apple Magic Mouse 2
-The drivers supports regular mouse motion and additionally scrolling and mouse middle click. Middle click is a single finger click near the middle portion of the touch surface OR a 3 finger click anywhere on the touch surface if you put the mouse in 3 finger middle click mode. Scrolling is a single finger up or down motion anywhere on the touch surface.
+The driver supports regular mouse motion and, additionally, scrolling and mouse middle click. Middle click is a single finger click near the middle portion of the touch surface OR a 3 finger click anywhere on the touch surface if you put the mouse in 3 finger middle click mode. Scrolling is a single finger up or down motion anywhere on the touch surface.
 
 ### Changing Parameters
 
-Several parameters are avaliable for you to modify to personalize the driver to your taste. These can be found in `/etc/modprobe.d/hid-magicmouse.conf` after install. Modify them and the next time the driver is loaded it will have the new values.
+Several parameters are available for you to modify to personalize the driver to your taste. These can be found in `/etc/modprobe.d/hid-magicmouse.conf` after install. Modify them and the next time the driver is loaded it will have the new values.
 
 ### Reloading the driver
 
@@ -64,7 +65,7 @@ tail -f ~/.local/share/xorg/Xorg.0.log
 
 Now unplug the trackpad and plug it back in, to see which driver gets loaded.
 
-## Data Layout of bluetooth packets.
+## Data Layout of Bluetooth packets.
 
 ```
 		/* The data layout for magic mouse 2 is:
@@ -119,11 +120,11 @@ Now unplug the trackpad and plug it back in, to see which driver gets loaded.
 
 ## Fixes
 
-Below is the explanation to 2 fixes performed when running the `install.sh` shown above. The first relates to the disconnection of the mouse over bluetooth and will restart the bluetooth service. The second regards the driver not being loaded when the mouse reconnects with the computer.
+Below is the explanation of the 2 fixes performed when running the `install.sh` shown above. The first relates to the disconnection of the mouse over Bluetooth and will restart the Bluetooth service. The second regards the driver not being loaded when the mouse reconnects with the computer.
 
 ### Bluetooth fix
 
-There have been many complaining of repeated and random disconnections of the Magic Mouse 2. One solution to this is to disable `eSCO mode` on the bluetooth service as shown [in this answer](https://askubuntu.com/a/629495/297110). You can disable it like this:
+There have been many complaints of repeated and random disconnections of the Magic Mouse 2. One solution to this is to disable `eSCO mode` on the Bluetooth service as shown [in this answer](https://askubuntu.com/a/629495/297110). You can disable it like this:
 
 ```
 echo 1 | sudo tee /sys/module/bluetooth/parameters/disable_esco
@@ -136,15 +137,15 @@ echo "options bluetooth disable_esco=1" | sudo tee /etc/modprobe.d/bluetooth-twe
 
 [0xABAD](https://github.com/0xABAD/magic-mouse-2) created a fix that loads the driver when it detects the mouse. Here we'll show an updated version that was changed a bit to use the idProduct of the device to identify any Magic Mouse 2.
 
-To begin we need to build the driver and register it has a kernel module, please take a look at `scripts/install.sh`.
+To begin we need to build the driver and register it as a kernel module, please take a look at `scripts/install.sh`.
 
-With that we'll create a shell script that will load the driver. Let's create a folder in `/opt/` to place it into.
+With that, we'll create a shell script that will load the driver. Let's create a folder in `/opt/` to place it into.
 
 ```bash
 sudo mkdir -p /opt/magic-mouse-fix/
 ```
 
-Let's create a script named `magic-mouse-2-add.sh` (to create and edit it use something like `sudo nano /opt/magic-mouse-fix/magic-mouse-2-add.sh`). This should be the its contents:
+Let's create a script named `magic-mouse-2-add.sh` (to create and edit it use something like `sudo nano /opt/magic-mouse-fix/magic-mouse-2-add.sh`). This should be the contents:
 
 ```bash
 #!/bin/sh
@@ -172,7 +173,7 @@ reload() {
 reload &
 ```
 
-You can also adjust the scroll_speed to a value of your liking (somewhere between 0 to 63). If you wish to disable scroll acceleration or middle clicking with 3 fingers then set those values to zero. Give the script permission to run with `sudo chmod +x /opt/magic-mouse-fix/magic-mouse-2-add.sh`. When this script is run it will unload the default Magic Mouse driver and then load the new one built eariler.
+You can also adjust the scroll_speed to a value of your liking (somewhere between 0 to 63). If you wish to disable scroll acceleration or middle-clicking with 3 fingers then set those values to zero. Give the script permission to run with `sudo chmod +x /opt/magic-mouse-fix/magic-mouse-2-add.sh`. When this script is run it will unload the default Magic Mouse driver and then load the new one built earlier.
 
 We now need to create a `udev` rule that runs the script and loads the driver when the Mouse connects. In `/etc/udev/rules.d` directory create a `10-magicmouse.rules` file and add the following:
 
@@ -196,7 +197,7 @@ Now we need to reload the `udev` database with:
 sudo udevadm control -R
 ```
 
-With that in place the Magic Mouse 2 will now be properly loaded with scrolling when connected via Bluetooth. Note that isn't perfect and bugs may be around. 
+With that in place, the Magic Mouse 2 will now be properly loaded with scrolling when connected via Bluetooth. Note that isn't perfect and bugs may be around. 
 
 ## Thanks
 * https://github.com/ponyfleisch/hid-magictrackpad2

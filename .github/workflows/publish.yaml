@@ -27,7 +27,7 @@ jobs:
       with:
         artifacts: ${{ env.deb_file }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Release ${{ github.ref_name }}
+        name: ${{ env.deb_file }} - $(date +"%Y-%b-%d")
         tag: ${{ github.ref_name }}
         overwrite: true
 

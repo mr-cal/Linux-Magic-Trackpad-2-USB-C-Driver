@@ -2,9 +2,8 @@ name: Build and Release DEB
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+   tags:
+    - '*'
 
 jobs:
   build:
@@ -27,4 +26,6 @@ jobs:
       with:
         artifacts: ${{ env.deb_file }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "latest"
+        removeArtifacts: true
+        replacesArtifacts: true
+        allowUpdates: true

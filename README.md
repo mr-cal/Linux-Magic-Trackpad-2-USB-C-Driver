@@ -12,6 +12,14 @@ This repository contains the Linux hid-magicmouse driver with Magic Trackpad 2 U
 
 This driver is based on the work of @RicardoEPRodrigues, @robotrovsky, @svartalf, @0xABAD, and probably others. Thank you!
 
+## Install driver on Debian, Ubuntu, and derivatives
+
+Download the latest release [here](https://github.com/mr-cal/Linux-Magic-Trackpad-2-USB-C-Driver/releases) and install it with:
+
+```bash
+sudo dpkg -i magicmouse-hid*.deb
+```
+
 ## Install Driver with DKMS
 
 Setup/install with:

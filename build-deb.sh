@@ -4,13 +4,10 @@ set -e
 set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ETC_DIR="/etc"
 PKG_DIR="/pkg-debian"
 OPT_DIR="/opt/magicmouse-hid"
 
 DEB="magicmouse-hid_2.1.0-0.deb"
-
-cp -rf ${DIR}${ETC_DIR} ${DIR}${PKG_DIR}
 
 mkdir -p ${DIR}${PKG_DIR}${OPT_DIR}/scripts
 cp -f ${DIR}/scripts/install.sh ${DIR}${PKG_DIR}${OPT_DIR}/scripts/install.sh

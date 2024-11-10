@@ -12,7 +12,7 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Package the driver
       run: ./build-deb.sh
@@ -28,6 +28,6 @@ jobs:
         artifacts: ${{ env.deb_file }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ env.deb_file }} - $(date +"%Y-%b-%d")
-        tag: ${{ github.ref_name }}
-        overwrite: true
+        removeArtifacts: true
+        replacesArtifacts: true
 

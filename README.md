@@ -16,7 +16,7 @@ This driver is based on the work of @RicardoEPRodrigues, @robotrovsky, @svartalf
 
 Setup/install with:
 
-```
+```bash
 sudo apt-get install dkms
 git clone https://github.com/mr-cal/Linux-Magic-Trackpad-2-USB-C-Driver.git
 cd Linux-Magic-Trackpad-2-USB-C-Driver
@@ -26,7 +26,7 @@ sudo ./install.sh
 
 ## Uninstall Driver
 
-```
+```bash
 sudo ./remove.sh
 ```
 

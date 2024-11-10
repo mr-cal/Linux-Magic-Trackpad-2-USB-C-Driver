@@ -1,0 +1,33 @@
+name: Build and Release DEB
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Package the driver
+      run: ./build-deb.sh
+
+    - name: Find DEB file
+      id: find_deb
+      run: echo "deb_file=$(find . -name '*.deb')" >> $GITHUB_ENV
+          
+    - name: Release DEB file
+      if: success()
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: ${{ env.deb_file }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Release ${{ github.ref_name }}
+        tag: ${{ github.ref_name }}
+        overwrite: true
+

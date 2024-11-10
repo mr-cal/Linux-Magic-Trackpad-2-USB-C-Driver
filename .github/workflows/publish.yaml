@@ -28,6 +28,7 @@ jobs:
         artifacts: ${{ env.deb_file }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ env.deb_file }} - $(date +"%Y-%b-%d")
+        commit: main
         removeArtifacts: true
         replacesArtifacts: true
 

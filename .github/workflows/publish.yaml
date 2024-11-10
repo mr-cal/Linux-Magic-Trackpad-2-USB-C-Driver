@@ -27,3 +27,4 @@ jobs:
       with:
         artifacts: ${{ env.deb_file }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        tag: "0.0.1"

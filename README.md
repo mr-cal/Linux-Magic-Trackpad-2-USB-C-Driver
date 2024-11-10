@@ -61,6 +61,12 @@ sudo ./remove.sh
 sudo dpkg -r magicmouse-hid
 ```
 
+## Wayland and X11
+
+Magic Trackpads work significantly better out of the box when using Wayland.
+
+Compared to X11, Wayland has excellent support for smooth scrolling, soft taps, and pinch to zoom. Wayland is the default compositor in Ubuntu 24.10 and newer.
+
 
 ## Thanks
 

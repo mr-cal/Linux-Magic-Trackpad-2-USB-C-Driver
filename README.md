@@ -65,9 +65,17 @@ sudo dpkg -r magicmouse-hid
 
 The out-of-box experience with Magic Trackpads is significantly better with Wayland compared to X11.
 
-Wayland has excellent support for smooth scrolling, soft taps, and pinch to zoom.
+| setup | usual default featureset |
+| -- | -- |
+| no driver | point, hard left click |
+| driver + X11 | point, hard left/right clicks, scroll |
+| driver + wayland | point, hard/soft left/right clicks, smooth scroll, zoom |
 
 Additional gestures can be configured with [touchegg](https://github.com/JoseExposito/touchegg).
+
+## Secure boot
+
+If you haven't installed an unofficial driver before, be advised that you must disable secure boot, use a kernel that does not require signed drivers, or self-sign the driver. See [here](https://askubuntu.com/questions/755238/why-disabling-secure-boot-is-enforced-policy-when-installing-3rd-party-modules) for more information.
 
 ## Thanks
 

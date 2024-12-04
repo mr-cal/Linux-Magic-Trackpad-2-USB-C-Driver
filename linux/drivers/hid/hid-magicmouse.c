@@ -17,6 +17,7 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/workqueue.h>
+#include <linux/version.h>
 
 #include "hid-ids.h"
 
@@ -52,6 +53,7 @@ module_param(report_undeciphered, bool, 0644);
 MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state field using a MSC_RAW event");
 
 #define TRACKPAD2_2021_BT_VERSION 0x110
+#define TRACKPAD_2024_BT_VERSION 0x314
 
 #define TRACKPAD_REPORT_ID 0x28
 #define TRACKPAD2_USB_REPORT_ID 0x02
@@ -566,10 +568,13 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 		 * loaded, whether connected through bluetooth or USB.
 		 */
 		if (hdev->vendor == BT_VENDOR_ID_APPLE) {
-			if (input->id.version == TRACKPAD2_2021_BT_VERSION)
+			if (input->id.version == TRACKPAD2_2021_BT_VERSION) {
+				input->name = "Apple Inc. Magic Trackpad 2021";
+			} else if (input->id.version == TRACKPAD_2024_BT_VERSION) {
+				input->name = "Apple Inc. Magic Trackpad USB-C";
+			} else {
 				input->name = "Apple Inc. Magic Trackpad";
-			else
-				input->name = "Apple Inc. Magic Trackpad 2";
+			}
 		} else { /* USB_VENDOR_ID_APPLE */
 			input->name = hdev->name;
 		}
@@ -933,8 +938,13 @@ static void magicmouse_remove(struct hid_device *hdev)
 	hid_hw_stop(hdev);
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
+static const __u8 *magicmouse_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+										   unsigned int *rsize)
+#else
 static __u8 *magicmouse_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-				     unsigned int *rsize)
+									 unsigned int *rsize)
+#endif
 {
 	/*
 	 * Change the usage from:

@@ -684,7 +684,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 	if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2 ||
 		input->id.product ==
 			USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC) {
-		input_set_events_per_packet(input, 200);
+		input_set_events_per_packet(input, 240);
 	} else {
 		input_set_events_per_packet(input, 60);
 	}

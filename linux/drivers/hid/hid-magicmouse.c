@@ -640,15 +640,10 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 	} else if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2 ||
 		   input->id.product ==
 			   USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC) {
-		if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2) {
-			input_set_abs_params(input, ABS_MT_PRESSURE, 0, 253, 0, 0);
-			input_set_abs_params(input, ABS_PRESSURE, 0, 253, 0, 0);
-			input_set_abs_params(input, ABS_MT_ORIENTATION, -3, 4, 0, 0);
-		} else {
-			input_set_abs_params(input, ABS_MT_PRESSURE, 0, 253, 0, 0);
-			input_set_abs_params(input, ABS_PRESSURE, 0, 253, 0, 0);
-			input_set_abs_params(input, ABS_MT_ORIENTATION, -3, 4, 0, 0);
-		}
+		input_set_abs_params(input, ABS_MT_PRESSURE, 0, 253, 0, 0);
+		input_set_abs_params(input, ABS_PRESSURE, 0, 253, 0, 0);
+		input_set_abs_params(input, ABS_MT_ORIENTATION, -3, 4, 0, 0);
+
 		input_set_abs_params(input, ABS_X, TRACKPAD2_MIN_X,
 				     TRACKPAD2_MAX_X, 0, 0);
 		input_set_abs_params(input, ABS_Y, TRACKPAD2_MIN_Y,
@@ -684,7 +679,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 	if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2 ||
 		input->id.product ==
 			USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC) {
-		input_set_events_per_packet(input, 240);
+		input_set_events_per_packet(input, 120);
 	} else {
 		input_set_events_per_packet(input, 60);
 	}

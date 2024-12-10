@@ -71,7 +71,8 @@ The out-of-box experience with Magic Trackpads is significantly better with Wayl
 | driver + X11 | point, hard left/right clicks, scroll, three-finger middle mouse button |
 | driver + wayland | point, hard/soft left/right clicks, smooth scroll, zoom, three-finger middle mouse button |
 
-Additional gestures can be configured with [touchegg](https://github.com/JoseExposito/touchegg).
+Additional gestures can be configured with [touchegg](https://github.com/JoseExposito/touchegg) or [libinput-gestures](https://github.com/bulletmark/libinput-gestures).
+
 
 ## Secure boot
 

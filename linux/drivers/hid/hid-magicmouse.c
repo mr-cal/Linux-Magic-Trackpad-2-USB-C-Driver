@@ -401,10 +401,34 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 			return 0;
 		}
 		msc->ntouches = 0;
-		for (ii = 0; ii < npoints; ii++)
+		u8 *tdata = 0;
+		for (ii = 0; ii < npoints; ii++) {
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
+			tdata = data + ii * 9 + 4;
+			hid_warn(hdev, "ID %d X: %d Y: %d Size: %d Orientation: %d T Major %d T Minor %d Pressure %d State %d Down %d\n",
+				tdata[8] & 0xf,
+				(tdata[1] << 27 | tdata[0] << 19) >> 19,
+				-((tdata[3] << 30 | tdata[2] << 22 | tdata[1] << 14) >> 19),
+				tdata[6],
+				(tdata[8] >> 5) - 4,
+				tdata[4],
+				tdata[5],
+				tdata[7],
+				tdata[3] & 0xC0,
+				((tdata[3] & 0xC0) == 0x80)
+			);
+		}
 
 		clicks = data[1];
+
+		//char *s = kmalloc(size*2+1, 0);
+		//s[size*2] = 0;
+		//int i = 0;
+		//for (i=0; i < size; i++) {
+		//	sprintf(s+i*2, "%02X", data[i]);
+		//}
+		//hid_warn(hdev, "Packet (%d bytes), (ntouches: (%d): %s\n", size, msc->ntouches, s);
+		//kfree(s);
 
 		/* The following bits provide a device specific timestamp. They
 		 * are unused here.

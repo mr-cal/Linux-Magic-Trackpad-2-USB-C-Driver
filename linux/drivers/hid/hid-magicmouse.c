@@ -53,7 +53,7 @@ module_param(report_undeciphered, bool, 0644);
 MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state field using a MSC_RAW event");
 
 #define TRACKPAD2_2021_BT_VERSION 0x110
-#define TRACKPAD2_USBC_BT_VERSION 0x314
+#define TRACKPAD_USBC_BT_VERSION 0x314
 
 #define TRACKPAD_REPORT_ID 0x28
 #define TRACKPAD2_USB_REPORT_ID 0x02
@@ -566,7 +566,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 		 */
 		if (hdev->vendor == BT_VENDOR_ID_APPLE) {
 			if (input->id.version == TRACKPAD2_2021_BT_VERSION ||
-				input->id.version == TRACKPAD2_USBC_BT_VERSION) {
+				input->id.version == TRACKPAD_USBC_BT_VERSION) {
 				input->name = "Apple Inc. Magic Trackpad";
 			} else {
 				input->name = "Apple Inc. Magic Trackpad 2";

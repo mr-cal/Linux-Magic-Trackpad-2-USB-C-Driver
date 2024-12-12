@@ -21,7 +21,7 @@
 
 #include "hid-ids.h"
 
-#define DEBUG 0
+#define DEBUG 1
 #define PACKET_DEBUG 0
 
 static bool emulate_3button = true;
@@ -223,6 +223,29 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
 
 	if (input->id.product == USB_DEVICE_ID_APPLE_MAGICMOUSE ||
 		input->id.product == USB_DEVICE_ID_APPLE_MAGICMOUSE2) {
+		/* tdata is 8 bytes per finger detected.
+		 * tdata[0] (lsb of x) and least sig 4bits of tdata[1] (msb of x)
+		 *          are x position of touch on touch surface.
+		 * tdata[1] most sig 4bits (lsb of y) and and tdata[2] (msb of y)
+		 *          are y position of touch on touch surface.
+		 * tdata[1] bits look like [y y y y x x x x]
+		 * tdata[3] touch major axis of ellipse of finger detected
+		 * tdata[4] touch minor axis of ellipse of finger detected
+		 * tdata[5] contains 6bits of size info (lsb) and the two msb of tdata[5]
+		 *          are the lsb of id: [id id size size size size size size]
+		 * tdata[6] 2 lsb bits of tdata[6] are the msb of id and 6msb of tdata[6]
+		 *          are the orientation of the touch. [o o o o o o id id]
+		 * tdata[7] 4 msb are state. 4lsb are unknown.
+		 *
+		 * [ x x x x x x x x ]
+		 * [ y y y y x x x x ]
+		 * [ y y y y y y y y ]
+		 * [touch major      ]
+		 * [touch minor      ]
+		 * [id id s s s s s s]
+		 * [o o o o o o id id]
+		 * [s s s s | unknown]
+		 */
 		id = (tdata[6] << 2 | tdata[5] >> 6) & 0xf;
 		x = (tdata[1] << 28 | tdata[0] << 20) >> 20;
 		y = -((tdata[2] << 24 | tdata[1] << 16) >> 20);
@@ -234,6 +257,28 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
 		down = state != TOUCH_STATE_NONE;
 	} else if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2 ||
 			input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC) {
+		/*
+		 * x: are x position of touch on touch surface
+		 * y: are y position of touch on touch surface
+		 * s: are state
+		 * touch_major: touch major axis of ellipse of finger detected
+		 * touch_minor: touch minor axis of ellipse of finger detected
+		 * size: size info
+		 * pressure: pressure of touch on touch surface
+		 * o: orientation of the touch on touch surface
+		 * i: id of touch
+		 * ?: Unknown data
+		 *
+		 * [ x x x x x x x x ]
+		 * [ y y y x x x x x ]
+		 * [ y y y y y y y y ]
+		 * [ s s ? ? ? ? y y ]
+		 * [ touch_major     ]
+		 * [ touch_minor     ]
+		 * [ size            ]
+		 * [ pressure        ]
+		 * [ o o o ? i i i i ]
+		 */
 		id = tdata[8] & 0xf;
 		x = (tdata[1] << 27 | tdata[0] << 19) >> 19;
 		y = -((tdata[3] << 30 | tdata[2] << 22 | tdata[1] << 14) >> 19);
@@ -413,8 +458,9 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
 #if DEBUG
 			tdata = data + ii * 9 + 4;
-			hid_warn(hdev, "ID: %02d X: %05d Y: %05d Size: %03d Orientation: %02d T Major %03d T Minor %03d Pressure %03d State %03d Down %d\n",
+			hid_notice(hdev, "| ID: %02d | TS %06d | X: %05d Y: %05d | Size: %03d | Orientation: %02d | T Major %03d T Minor %03d | Pressure %03d | State %03d | Down %d | Unkown %02d & %d |\n",
 				tdata[8] & 0xf,
+				data[1] >> 6 | data[2] << 2 | data[3] << 10,
 				(tdata[1] << 27 | tdata[0] << 19) >> 19,
 				-((tdata[3] << 30 | tdata[2] << 22 | tdata[1] << 14) >> 19),
 				tdata[6],
@@ -423,7 +469,9 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 				tdata[5],
 				tdata[7],
 				tdata[3] & 0xC0,
-				((tdata[3] & 0xC0) == 0x80)
+				((tdata[3] & 0xC0) == 0x80),
+				(tdata[3] & 0x3C) >> 2,
+				(tdata[8] & 0x10) >> 4
 			);
 #endif
 		}
@@ -435,7 +483,7 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 		for (i=0; i < size; i++) {
 			sprintf(s+i*2, "%02X", data[i]);
 		}
-		hid_warn(hdev, "Packet (%d bytes), (ntouches: (%d): %s\n", size, msc->ntouches, s);
+		hid_notice(hdev, "Packet (%d bytes), (ntouches: (%d): %s\n", size, msc->ntouches, s);
 		kfree(s);
 #endif
 

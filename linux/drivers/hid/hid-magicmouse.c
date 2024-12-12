@@ -21,7 +21,7 @@
 
 #include "hid-ids.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 static bool emulate_3button = true;
 module_param(emulate_3button, bool, 0644);
@@ -407,8 +407,10 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 
 #if DEBUG
 		u8 *tdata = 0;
+#endif
 		for (ii = 0; ii < npoints; ii++) {
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
+#if DEBUG
 			tdata = data + ii * 9 + 4;
 			hid_warn(hdev, "ID: %02d X: %05d Y: %05d Size: %03d Orientation: %02d T Major %03d T Minor %03d Pressure %03d State %03d Down %d\n",
 				tdata[8] & 0xf,
@@ -422,8 +424,8 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 				tdata[3] & 0xC0,
 				((tdata[3] & 0xC0) == 0x80)
 			);
-		}
 #endif
+		}
 
 		//char *s = kmalloc(size*2+1, 0);
 		//s[size*2] = 0;

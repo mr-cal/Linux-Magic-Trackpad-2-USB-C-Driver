@@ -22,6 +22,7 @@
 #include "hid-ids.h"
 
 #define DEBUG 0
+#define PACKET_DEBUG 0
 
 static bool emulate_3button = true;
 module_param(emulate_3button, bool, 0644);
@@ -427,14 +428,16 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 #endif
 		}
 
-		//char *s = kmalloc(size*2+1, 0);
-		//s[size*2] = 0;
-		//int i = 0;
-		//for (i=0; i < size; i++) {
-		//	sprintf(s+i*2, "%02X", data[i]);
-		//}
-		//hid_warn(hdev, "Packet (%d bytes), (ntouches: (%d): %s\n", size, msc->ntouches, s);
-		//kfree(s);
+#if PACKET_DEBUG
+		char *s = kmalloc(size*2+1, 0);
+		s[size*2] = 0;
+		int i = 0;
+		for (i=0; i < size; i++) {
+			sprintf(s+i*2, "%02X", data[i]);
+		}
+		hid_warn(hdev, "Packet (%d bytes), (ntouches: (%d): %s\n", size, msc->ntouches, s);
+		kfree(s);
+#endif
 
 		/* The following bits provide a device specific timestamp. They
 		 * are unused here.
@@ -703,7 +706,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 
 	if (input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2 ||
 		input->id.product == USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC) {
-		input_set_events_per_packet(input, 120);
+		input_set_events_per_packet(input, 1);
 	} else {
 		input_set_events_per_packet(input, 60);
 	}

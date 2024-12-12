@@ -21,6 +21,8 @@
 
 #include "hid-ids.h"
 
+#define DEBUG 1
+
 static bool emulate_3button = true;
 module_param(emulate_3button, bool, 0644);
 MODULE_PARM_DESC(emulate_3button, "Emulate a middle button");
@@ -401,6 +403,9 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 			return 0;
 		}
 		msc->ntouches = 0;
+		clicks = data[1];
+
+#if DEBUG
 		u8 *tdata = 0;
 		for (ii = 0; ii < npoints; ii++) {
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
@@ -418,8 +423,7 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 				((tdata[3] & 0xC0) == 0x80)
 			);
 		}
-
-		clicks = data[1];
+#endif
 
 		//char *s = kmalloc(size*2+1, 0);
 		//s[size*2] = 0;

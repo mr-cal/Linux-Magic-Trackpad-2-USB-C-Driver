@@ -61,6 +61,30 @@ sudo ./remove.sh
 sudo dpkg -r magicmouse-hid
 ```
 
+## Data Layout of Trackpad
+
+```bash
+x: are x position of touch on touch surface
+y: are y position of touch on touch surface
+s: are state
+touch_major: touch major axis of ellipse of finger detected
+touch_minor: touch minor axis of ellipse of finger detected
+size: size info
+pressure: pressure of touch on touch surface
+o: orientation of the touch on touch surface
+i: id of touch
+?: Unknown data
+[ x x x x x x x x ]
+[ y y y x x x x x ]
+[ y y y y y y y y ]
+[ s s ? ? ? ? y y ]
+[ touch_major     ]
+[ touch_minor     ]
+[ size            ]
+[ pressure        ]
+[ o o o ? i i i i ]
+```
+
 ## Wayland and X11
 
 The out-of-box experience with Magic Trackpads is significantly better with Wayland compared to X11.

@@ -458,7 +458,7 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
 #if DEBUG
 			tdata = data + ii * 9 + 4;
-			hid_notice(hdev, "| ID: %02d | TS %06d | X: %05d Y: %05d | Size: %03d | Orientation: %02d | T Major %03d T Minor %03d | Pressure %03d | State %03d | Down %d | Unkown %02d & %d |\n",
+			hid_notice(hdev, "| ID: %02d | TS %06d | X: %05d Y: %05d | Size: %03d | Orientation: %02d | T Major %03d T Minor %03d | Pressure %03d | State %03d | Down %d | Unknown %02d & %d |\n",
 				tdata[8] & 0xf,
 				data[1] >> 6 | data[2] << 2 | data[3] << 10,
 				(tdata[1] << 27 | tdata[0] << 19) >> 19,

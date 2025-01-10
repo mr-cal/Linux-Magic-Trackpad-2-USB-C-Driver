@@ -1,12 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- *	 Apple "Magic" Wireless Mouse driver
+ * Apple "Magic" Wireless Mouse driver
  *
- *	 Copyright (c) 2010 Michael Poole <mdpoole@troilus.org>
- *	 Copyright (c) 2010 Chase Douglas <chase.douglas@canonical.com>
- */
-
-/*
+ * Copyright (c) 2010 Michael Poole <mdpoole@troilus.org>
+ * Copyright (c) 2010 Chase Douglas <chase.douglas@canonical.com>
  */
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
@@ -648,7 +645,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
 		 */
 		if (hdev->vendor == BT_VENDOR_ID_APPLE) {
 			if (input->id.version == TRACKPAD2_2021_BT_VERSION ||
-                                input->id.version == TRACKPAD2_A1535_2733_VERSION ||
+				input->id.version == TRACKPAD2_A1535_2733_VERSION ||
 				input->id.version == TRACKPAD_USBC_BT_VERSION) {
 				input->name = "Apple Inc. Magic Trackpad";
 			} else {
@@ -1026,11 +1023,11 @@ static __u8 *magicmouse_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 {
 	/*
 	 * Change the usage from:
-	 *	 0x06, 0x00, 0xff, // Usage Page (Vendor Defined Page 1)  0
-	 *	 0x09, 0x0b,	   // Usage (Vendor Usage 0x0b)			  3
+	 *   0x06, 0x00, 0xff, // Usage Page (Vendor Defined Page 1)  0
+	 *   0x09, 0x0b,       // Usage (Vendor Usage 0x0b)           3
 	 * To:
-	 *	 0x05, 0x01,	   // Usage Page (Generic Desktop)		  0
-	 *	 0x09, 0x02,	   // Usage (Mouse)						  2
+	 *   0x05, 0x01,       // Usage Page (Generic Desktop)        0
+	 *   0x09, 0x02,       // Usage (Mouse)                       2
 	 */
 	if (hdev->vendor == USB_VENDOR_ID_APPLE &&
 		(hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||

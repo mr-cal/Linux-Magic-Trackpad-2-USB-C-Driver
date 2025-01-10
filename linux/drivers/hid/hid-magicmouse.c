@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Apple "Magic" Wireless Mouse driver
+ * Apple "Magic" Wireless Mouse & Trackpad driver
  *
  * Copyright (c) 2010 Michael Poole <mdpoole@troilus.org>
  * Copyright (c) 2010 Chase Douglas <chase.douglas@canonical.com>

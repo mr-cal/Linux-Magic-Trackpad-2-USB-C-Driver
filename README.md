@@ -125,6 +125,11 @@ Additional gestures can be configured with [touchegg](https://github.com/JoseExp
 
 If you haven't installed an unofficial driver before, be advised that you must disable secure boot, use a kernel that does not require signed drivers, or self-sign the driver. See [here](https://askubuntu.com/questions/755238/why-disabling-secure-boot-is-enforced-policy-when-installing-3rd-party-modules) for more information.
 
+## Apple Magic Keyboard USB-C
+
+Support for the USB-C version of the Apple magic keyboard is not supported by the project because it is a different driver.
+Upstream support can be found [here](https://patchwork.kernel.org/project/linux-input/patch/20250112041314.11661-1-YevgenVovk@ukr.net/).
+
 ## Thanks
 
 This driver is based on the work of @RicardoEPRodrigues, @robotrovsky, @svartalf, @0xABAD, and probably others. Thank you!

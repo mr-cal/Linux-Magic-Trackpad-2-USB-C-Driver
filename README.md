@@ -132,7 +132,7 @@ Upstream support can be found [here](https://patchwork.kernel.org/project/linux-
 
 ## Thanks
 
-This driver is based on the work of @RicardoEPRodrigues, @robotrovsky, @svartalf, @0xABAD, and probably others. Thank you!
+This driver is based on the work of @SeDi343, @RicardoEPRodrigues, @robotrovsky, @svartalf, @0xABAD, and others. Thank you!
 
 * https://github.com/RicardoEPRodrigues/magicmouse-hid
 * https://github.com/ponyfleisch/hid-magictrackpad2

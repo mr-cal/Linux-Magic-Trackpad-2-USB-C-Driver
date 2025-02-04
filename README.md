@@ -69,7 +69,7 @@ sudo dpkg -r magicmouse-hid
 ```
 
 ## Configure libinput
-For better responsibility, specially multi touch gestures, libinput parameters need to be implemented.
+For better responsibility, specially multi touch gestures, libinput parameters need to be implemented, if not supported already. A [upstream patch](https://gitlab.freedesktop.org/libinput/libinput/-/issues/1080) for the trakcpad has been accepted already.
 More information can be found [here](https://askubuntu.com/questions/1283762/custom-libinput-quirk-for-apple-magic-trackpad-2).  
 
 To configure the Apple Magic Trackpad Parameters for libinput create quirks file `/usr/share/libinput/local-overrides.quirks` with following content:  

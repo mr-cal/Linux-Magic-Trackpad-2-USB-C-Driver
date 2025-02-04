@@ -74,8 +74,18 @@ More information can be found [here](https://askubuntu.com/questions/1283762/cus
 
 To configure the Apple Magic Trackpad Parameters for libinput create quirks file `/usr/share/libinput/local-overrides.quirks` with following content:  
 ```bash
-[Apple Magic Trackpad USB C (Bluetooth, USB)]
+[Apple Magic Trackpad USB-C (Bluetooth)]
+MatchBus=bluetooth
 MatchVendor=0x004C
+MatchProduct=0x0324
+AttrTouchSizeRange=20:10
+AttrPressureRange=3:0
+AttrPalmSizeThreshold=900
+AttrThumbSizeThreshold=700
+
+[Apple Magic Trackpad USB-C (USB)]
+MatchBus=usb
+MatchVendor=0x05AC
 MatchProduct=0x0324
 AttrTouchSizeRange=20:10
 AttrPressureRange=3:0

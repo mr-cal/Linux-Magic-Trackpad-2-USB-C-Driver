@@ -13,6 +13,7 @@
 #include <linux/input/mt.h>
 #include <linux/module.h>
 #include <linux/slab.h>
+#include <linux/timer.h>
 #include <linux/workqueue.h>
 #include <linux/version.h>
 
@@ -1007,7 +1008,11 @@ static int magicmouse_probe(struct hid_device *hdev,
 
 	return 0;
 err_stop_hw:
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)
+	timer_delete_sync(&msc->battery_timer);
+#else
 	del_timer_sync(&msc->battery_timer);
+#endif
 	hid_hw_stop(hdev);
 	return ret;
 }
@@ -1018,7 +1023,11 @@ static void magicmouse_remove(struct hid_device *hdev)
 
 	if (msc) {
 		cancel_delayed_work_sync(&msc->work);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)
+		timer_delete_sync(&msc->battery_timer);
+#else
 		del_timer_sync(&msc->battery_timer);
+#endif
 	}
 
 	hid_hw_stop(hdev);

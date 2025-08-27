@@ -1,0 +1,16 @@
+name: Test building the driver
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+
+    - name: Package the driver
+      run: ./build-deb.sh
